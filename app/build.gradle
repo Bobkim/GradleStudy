@@ -9,21 +9,29 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        resValue 'string', 'appName', 'dddyyy'
+        resValue 'drawable', 'appIcon', 'realIcon'
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            sourceSets {
+
+            }
         }
     }
 
-    flavorDimensions "api", 'mode'
+    flavorDimensions 'mode'
+//    flavorDimensions 'api', 'mode'
 
     productFlavors {
-        demo {
-            // Assigns this product flavor to the "mode" flavor dimension.
-            dimension "mode"
-        }
+//        demo {
+//            // Assigns this product flavor to the "mode" flavor dimension.
+//            dimension "mode"
+//        }
 
         full {
             dimension "mode"
@@ -34,34 +42,35 @@ android {
         // between flavor dimensions based on the order in which they appear next
         // to the flavorDimensions property above--the first dimension has a higher
         // priority than the second, and so on.
-        minApi24 {
-            dimension "api"
-            minSdkVersion 24
-            // To ensure the target device receives the version of the app with
-            // the highest compatible API level, assign version codes in increasing
-            // value with API level. To learn more about assigning version codes to
-            // support app updates and uploading to Google Play, read Multiple APK Support
-            versionCode 30000 + android.defaultConfig.versionCode
-            versionNameSuffix "-minApi24"
-        }
-
-        minApi23 {
-            dimension "api"
-            minSdkVersion 23
-            versionCode 20000  + android.defaultConfig.versionCode
-            versionNameSuffix "-minApi23"
-        }
-
-        minApi21 {
-            dimension "api"
-            minSdkVersion 21
-            versionCode 10000  + android.defaultConfig.versionCode
-            versionNameSuffix "-minApi21"
-        }
+//        minApi24 {
+//            dimension "api"
+//            minSdkVersion 24
+//            // To ensure the target device receives the version of the app with
+//            // the highest compatible API level, assign version codes in increasing
+//            // value with API level. To learn more about assigning version codes to
+//            // support app updates and uploading to Google Play, read Multiple APK Support
+//            versionCode 30000 + android.defaultConfig.versionCode
+//            versionNameSuffix "-minApi24"
+//        }
+//
+//        minApi23 {
+//            dimension "api"
+//            minSdkVersion 23
+//            versionCode 20000  + android.defaultConfig.versionCode
+//            versionNameSuffix "-minApi23"
+//        }
+//
+//        minApi21 {
+//            dimension "api"
+//            minSdkVersion 21
+//            versionCode 10000  + android.defaultConfig.versionCode
+//            versionNameSuffix "-minApi21"
+//            buildConfigField("int", "deviceType", "1")
+//        }
     }
 
     variantFilter { variant ->
-        println "=====variant=======" + variant.flavors.name
+//        println "=====variant=======" + variant.flavors.name
         def names = variant.flavors*.name
         // To check for a certain build type, use variant.buildType.name == "<buildType>"
         if (names.contains("minApi21") && names.contains("demo")) {

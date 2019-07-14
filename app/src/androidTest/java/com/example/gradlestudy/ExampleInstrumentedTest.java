@@ -7,6 +7,13 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.*;
 
 /**
@@ -22,5 +29,17 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.example.gradlestudy", appContext.getPackageName());
+    }
+
+    @Test
+    public void changeText_sameActivity() {
+        // Type text and then press the button.
+        onView(withId(R.id.editTextUserInput))
+                .perform(typeText(stringToBeTyped), closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(click());
+
+        // Check that the text was changed.
+        onView(withId(R.id.textToBeChanged))
+                .check(matches(withText(stringToBeTyped)));
     }
 }

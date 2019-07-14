@@ -2,13 +2,15 @@
 
 buildscript {
     repositories {
+        println "111111${thisObject.getClass()}"
         google()
         jcenter()
-        
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
-        
+        println "22222${thisObject.getClass()}"
+        classpath 'com.android.tools.build:gradle:3.3.2'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -16,12 +18,99 @@ buildscript {
 
 allprojects {
     repositories {
+        println "33333${thisObject.getClass()}"
         google()
         jcenter()
-        
+
     }
 }
 
 task clean(type: Delete) {
+    println "44444${thisObject.getClass()}"
     delete rootProject.buildDir
+}
+
+task closureDemo << {
+    println "55555${thisObject.getClass()}"
+    customEach {
+        println it
+    }
+}
+
+def customEach(closure) {
+    for (int i in 1..10) {
+        closure(i)
+    }
+}
+
+task helloClosure {
+    eachMap {k, v ->
+        println "88888:$k, $v"
+    }
+}
+
+def eachMap(closure) {
+    def map1 = ["name":"张三", "age":"34"]
+    map1.each {
+        closure(it.key, it.value)
+    }
+}
+
+task helloDelegate << {
+    new Delegate().test {
+        println "thisObject:${thisObject.getClass()}"
+        println "owner:${owner.getClass()}"
+        println "delegate:${delegate.getClass()}"
+        method1()
+        it.method1()
+    }
+}
+
+def method1() {
+    println "Context this:${this.getClass()} in root"
+    println "method1 in root"
+
+}
+
+class Delegate {
+    def method1() {
+        println "Delegate this:${this.getClass()} in delegate"
+        println "method1 in delegate"
+
+    }
+    def test(Closure<Delegate> closure) {
+        closure(this)
+    }
+}
+
+task configClosure << {
+    person {
+        println "set value ${thisObject.getClass()}"
+        personName = "张三"
+        personAge= 20
+        dumpPerson()
+    }
+}
+
+class Person {
+    String personName
+    int personAge
+
+    def dumpPerson() {
+
+        println "name is ${personName}, age is ${personAge}"
+    }
+}
+
+def person(Closure<Person> closure) {
+    println "89898989898"
+    Person p = new Person()
+    println "89898989898===+++${closure.delegate.getClass()}"
+    closure.delegate = p
+    println "89898989898===+++${closure.delegate.getClass()}"
+
+    closure.setResolveStrategy(Closure.DELEGATE_FIRST)
+    closure(p)
+    println "89898989898==="
+
 }
